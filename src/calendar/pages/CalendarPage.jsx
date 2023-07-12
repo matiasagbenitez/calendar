@@ -4,6 +4,7 @@ import { addHours } from "date-fns";
 import { CalendarEvent, CalendarModal, Navbar } from "../";
 import { localizer, calendarMessagesES } from "../../helpers";
 import { useState } from "react";
+import { useUiStore } from "../../hooks/useUiStore";
 
 const events = [
   {
@@ -20,8 +21,11 @@ const events = [
 ];
 
 export const CalendarPage = () => {
+  const { openDateModal } = useUiStore();
 
-  const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "week");
+  const [lastView, setLastView] = useState(
+    localStorage.getItem("lastView") || "week"
+  );
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
@@ -35,13 +39,13 @@ export const CalendarPage = () => {
   };
 
   const onDoubleClick = (event) => {
-    console.log({doubleClick: event});
+    openDateModal();
   };
-  
+
   const onSelect = (event) => {
-    console.log({click: event});
+    console.log({ click: event });
   };
-  
+
   const onViewChanged = (event) => {
     setLastView(event);
     localStorage.setItem("lastView", event);
@@ -53,13 +57,13 @@ export const CalendarPage = () => {
       <Calendar
         culture="es"
         localizer={localizer}
-        view={lastView}     // "month", "week", "day", "agenda"
+        view={lastView} // "month", "week", "day", "agenda"
         events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: "calc(100vh - 80px)" }}
         messages={calendarMessagesES()}
-        eventPropGetter={(eventStyleGetter)}
+        eventPropGetter={eventStyleGetter}
         components={{
           event: CalendarEvent,
         }}

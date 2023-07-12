@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import Swal from "sweetalert2";
 import es from "date-fns/locale/es";
 import { addHours, differenceInSeconds } from "date-fns";
+import { useUiStore } from "../../hooks/useUiStore";
 
 registerLocale("es", es);
 
@@ -25,6 +26,7 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
+  const { isDateModalOpen, closeDateModal } = useUiStore();
   const [isOpen, setIsOpen] = useState(true);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -55,7 +57,7 @@ export const CalendarModal = () => {
   };
 
   const onCloseModal = () => {
-    setIsOpen(false);
+    closeDateModal();
   };
 
   const onSubmit = (event) => {
@@ -65,13 +67,13 @@ export const CalendarModal = () => {
     const difference = differenceInSeconds(formValues.end, formValues.start);
 
     if (isNaN(difference) || difference <= 0) {
-        Swal.fire({
-            title: "¡Verfica las fechas!",
-            text: "La fecha de fin debe ser mayor a la fecha de inicio.",
-            icon: "error",
-            confirmButtonColor: "#3B71CA", // Cambia el color aquí
-          });
-          
+      Swal.fire({
+        title: "¡Verfica las fechas!",
+        text: "La fecha de fin debe ser mayor a la fecha de inicio.",
+        icon: "error",
+        confirmButtonColor: "#3B71CA", // Cambia el color aquí
+      });
+
       return;
     }
 
@@ -80,7 +82,7 @@ export const CalendarModal = () => {
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={isDateModalOpen}
       onRequestClose={onCloseModal}
       style={customStyles}
       className="modal"
