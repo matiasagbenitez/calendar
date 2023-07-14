@@ -16,7 +16,7 @@ const registerFormFields = {
 };
 
 export const LoginPage = () => {
-  const { startLogin, errorMessage } = useAuthStore();
+  const { startLogin, errorMessage, startRegister } = useAuthStore();
 
   // LOGIN
   const {
@@ -41,6 +41,20 @@ export const LoginPage = () => {
 
   const registerSubmit = (event) => {
     event.preventDefault();
+    if (registerPassword !== registerPassword2) {
+      Swal.fire({
+        title: "Error",
+        text: "Las contraseñas deben coincidir",
+        icon: "error",
+        confirmButtonColor: "#3B71CA", // Cambia el color aquí
+      });
+      return;
+    }
+    startRegister({
+      name: registerName,
+      email: registerEmail,
+      password: registerPassword,
+    });
   };
 
   useEffect(() => {
