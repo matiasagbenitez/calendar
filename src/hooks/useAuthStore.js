@@ -4,7 +4,7 @@ import { onChecking, onLogin, onLogout, clearErrorMessage } from "../store";
 
 export const useAuthStore = () => {
 
-    const { status, username, errorMessage } = useSelector(state => state.auth);
+    const { status, user, errorMessage } = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
     const startLogin = async ({ email, password }) => {
@@ -53,15 +53,21 @@ export const useAuthStore = () => {
         }
     }
 
+    const startLogout = () => {
+        localStorage.clear();
+        dispatch(onLogout());
+    }
+
     return {
         // Propiedades
         status,
-        username,
+        user,
         errorMessage,
 
         // Métodos
         startLogin,
         startRegister,
-        checkAuthToken
+        checkAuthToken,
+        startLogout
     }
 }

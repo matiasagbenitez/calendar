@@ -5,7 +5,6 @@ import { useAuthStore } from "../hooks";
 import { useEffect } from "react";
 
 export const AppRouter = () => {
-
   const { status, checkAuthToken } = useAuthStore();
 
   useEffect(() => {
@@ -13,17 +12,22 @@ export const AppRouter = () => {
   }, []);
 
   if (status === "checking") {
-    return;
+    return <h3>Cargando...</h3>;
   }
 
   return (
     <Routes>
       {status === "not-authenticated" ? (
-        <Route path="/auth/*" element={<LoginPage />} />
+        <>
+          <Route path="/auth/*" element={<LoginPage />} />
+          <Route path="/*" element={<Navigate to="/auth/login" />} />
+        </>
       ) : (
-        <Route path="/*" element={<CalendarPage />} />
+        <>
+          <Route path="/" element={<CalendarPage />} />
+          <Route path="/*" element={<Navigate to="/" />} />
+        </>
       )}
-      <Route path="/*" element={<Navigate to="/auth/login" />} />
     </Routes>
   );
 };
