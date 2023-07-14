@@ -1,4 +1,6 @@
-import { useForm } from "../../hooks";
+import { useEffect } from "react";
+import { useForm, useAuthStore } from "../../hooks";
+import Swal from "sweetalert2";
 import "./LoginPage.css";
 
 const loginFormFields = {
@@ -14,6 +16,7 @@ const registerFormFields = {
 };
 
 export const LoginPage = () => {
+  const { startLogin, errorMessage } = useAuthStore();
 
   // LOGIN
   const {
@@ -24,9 +27,9 @@ export const LoginPage = () => {
 
   const loginSubmit = (event) => {
     event.preventDefault();
+    startLogin({ email: loginEmail, password: loginPassword });
   };
-  
-  
+
   // REGISTER
   const {
     registerName,
@@ -39,6 +42,17 @@ export const LoginPage = () => {
   const registerSubmit = (event) => {
     event.preventDefault();
   };
+
+  useEffect(() => {
+    if (errorMessage !== undefined) {
+      Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonColor: "#3B71CA", // Cambia el color aquí
+      });
+    }
+  }, [errorMessage]);
 
   return (
     <div className="container login-container">
